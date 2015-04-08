@@ -55,36 +55,35 @@ module.exports = function (engineOptions) {
                     // Transpiled ES6 may export components as { default: Component }
                     component = component.default || component;
                     component = React.createFactory(component);
+
+                    process.nextTick(function () {
+                        callback(null, function (context, options, callback) {
+                            var markup = doctype;
+                            try {
+                                markup += React.renderToStaticMarkup(component(context));
+                            }
+                            catch (e) {
+                                throw e;
+                            }
+                            if (engineOptions.beautify) {
+                                // NOTE: This will screw up some things where whitespace is important, and be
+                                // subtly different than prod.
+                                markup = beautifyHTML(markup);
+                            }
+                            if (process.env.NODE_ENV === 'development' || !caching) {
+                                Object.keys(require.cache).forEach(function (module) {
+                                    if (moduleDetectRegEx.test(require.cache[module].filename)) {
+                                        delete require.cache[module];
+                                    }
+                                });
+                            }
+                            callback(null, markup);
+                        });
+                    });
                 }
                 catch (e) {
-                    return function () {
-                        throw e;
-                    };
+                    callback(e);
                 }
-                process.nextTick(function () {
-                    callback(null, function (context, options, callback) {
-                        var markup = doctype;
-                        try {
-                            markup += React.renderToStaticMarkup(component(context));
-                        }
-                        catch (e) {
-                            throw e;
-                        }
-                        if (engineOptions.beautify) {
-                            // NOTE: This will screw up some things where whitespace is important, and be
-                            // subtly different than prod.
-                            markup = beautifyHTML(markup);
-                        }
-                        if (process.env.NODE_ENV === 'development' || !caching) {
-                            Object.keys(require.cache).forEach(function (module) {
-                                if (moduleDetectRegEx.test(require.cache[module].filename)) {
-                                    delete require.cache[module];
-                                }
-                            });
-                        }
-                        callback(null, markup);
-                    });
-                });
             }
         },
         compileMode: 'async'
