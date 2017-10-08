@@ -10,6 +10,7 @@
 'use strict';
 
 var React = require('react');
+var ReactDOMServer = require('react-dom/server');
 var beautifyHTML = require('js-beautify').html;
 var nodeJSX = require('node-jsx');
 var assign = require('object-assign');
@@ -60,7 +61,7 @@ module.exports = function (engineOptions) {
                         callback(null, function (context, options, callback) {
                             var markup = doctype;
                             try {
-                                markup += React.renderToStaticMarkup(component(context));
+                                markup += ReactDOMServer.renderToString(component(context));
                             }
                             catch (e) {
                                 throw e;

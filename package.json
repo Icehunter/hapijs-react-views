@@ -21,7 +21,8 @@
     "author": "Ryan Wilson <syndicated.life@gmail.com> (http://syndicatedlife.com/)",
     "license": "BSD-3-Clause",
     "peerDependencies": {
-        "react": "0.12 - 0.13"
+        "react": "16.0",
+        "react-dom": "16.0"
     },
     "dependencies": {
         "js-beautify": "^1.5.4",
