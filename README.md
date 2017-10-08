@@ -18,9 +18,9 @@ npm i hapijs-react-views react -S
 
 ```js
 // app.js
-var hapi = require('hapi');
+const hapi = require('hapi');
 server = new hapi.Server();
-var engine = require('hapijs-react-views')();
+const engine = require('hapijs-react-views')();
 
 server.views({
     defaultExtension: 'jsx',
@@ -47,7 +47,7 @@ option | values | default
 The defaults are sane, but just in case you want to change something, here's how it would look:
 
 ```js
-var options = { jsx: { harmony: true } };
+const options = { jsx: { harmony: true } };
 server.views({
     defaultExtension: 'jsx',
     engines: {
@@ -63,11 +63,13 @@ server.views({
 Your views should be node modules that export a React component. Let's assume you have this file in `views/index.jsx`:
 
 ```js
-var HelloMessage = React.createClass({
-  render: function() {
+const React = require('react');
+
+class HelloMessage extends React.Component {
+  render() {
     return <div>Hello {this.props.name}</div>;
   }
-});
+}
 
 module.exports = HelloMessage;
 ```
@@ -103,8 +105,10 @@ Simply pass the relevant props to a layout component.
 
 `views/layouts/default.jsx`:
 ```js
-var DefaultLayout = React.createClass({
-  render: function() {
+const React = require('react');
+
+class DefaultLayout extends React.Component {
+  render() {
     return (
       <html>
         <head><title>{this.props.title}</title></head>
@@ -112,24 +116,25 @@ var DefaultLayout = React.createClass({
       </html>
     );
   }
-});
+}
 
 module.exports = DefaultLayout;
 ```
 
 `views/index.jsx`:
 ```js
-var DefaultLayout = require('./layouts/default');
+const React = require('react');
+const DefaultLayout = require('./layouts/default');
 
-var HelloMessage = React.createClass({
-  render: function() {
+class HelloMessage extends React.Component {
+  render() {
     return (
       <DefaultLayout title={this.props.title}>
         <div>Hello {this.props.name}</div>
       </DefaultLayout>
     );
   }
-});
+}
 
 module.exports = HelloMessage;
 ```
