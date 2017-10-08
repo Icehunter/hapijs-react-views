@@ -1,6 +1,6 @@
 {
     "name": "hapijs-react-views",
-    "version": "0.7.3",
+    "version": "0.8.0",
     "description": "This is a Hapi view engine which renders React components on server. It renders static markup and *does not* support mounting those views on the client.",
     "keywords": [
         "hapi",
